@@ -1,10 +1,20 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>事業主研修版_労働災害発生時の対応</title>
+  
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CS9WF785LR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CS9WF785LR');
+</script>
+
   <style>
     body {
       font-family: sans-serif;
@@ -12,7 +22,9 @@
       background-color: #f7f7f7;
       color: #333;
     }
-    .hidden { display: none; }
+    .hidden {
+      display: none;
+    }
     .section {
       max-width: 800px;
       margin: auto;
@@ -41,7 +53,9 @@
       background-color: #0078d4;
       color: white;
     }
-    button:hover { background-color: #106ebe; }
+    button:hover {
+      background-color: #106ebe;
+    }
     .video-container {
       position: relative;
       width: 100%;
@@ -51,7 +65,121 @@
       border-radius: 8px;
       overflow: hidden;
     }
-    video { width: 100%; height: auto; display: block; outline: none; }
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      outline: none;
+    }
+    /* シークバーとコントロールを非表示にする */
+    video::-webkit-media-controls {
+      display: none !important;
+    }
+    video::-moz-media-controls {
+      display: none !important;
+    }
+    video::-webkit-media-controls-panel {
+      display: none !important;
+    }
+    video::-webkit-media-controls-play-button {
+      display: none !important;
+    }
+    video::-webkit-media-controls-timeline {
+      display: none !important;
+    }
+    video::-webkit-media-controls-current-time-display {
+      display: none !important;
+    }
+    video::-webkit-media-controls-time-remaining-display {
+      display: none !important;
+    }
+    video::-webkit-media-controls-mute-button {
+      display: none !important;
+    }
+    video::-webkit-media-controls-toggle-closed-captions-button {
+      display: none !important;
+    }
+    video::-webkit-media-controls-volume-slider {
+      display: none !important;
+    }
+    video::-webkit-media-controls-fullscreen-button {
+      display: none !important;
+    }
+    #confirmationCode {
+      font-weight: bold;
+      font-size: 1.4em;
+      margin-top: 1em;
+      background-color: #e9e9e9;
+      padding: 0.5em;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    /* クイズ関連のスタイル */
+    .quiz-question {
+      font-size: 1.3em;
+      margin-bottom: 1em;
+      font-weight: bold;
+    }
+    .quiz-options button {
+      display: block;
+      width: 80%;
+      margin: 0.8em auto;
+      padding: 0.8em;
+      background-color: #e0e0e0;
+      color: #333;
+      border: 1px solid #ccc;
+      font-size: 1.1em;
+    }
+    .quiz-options button:hover {
+      background-color: #d0d0d0;
+    }
+    .quiz-message {
+      font-size: 1.1em;
+      margin-top: 1em;
+      font-weight: bold;
+    }
+    .quiz-message.correct {
+      color: green;
+    }
+    .quiz-message.incorrect {
+      color: red;
+    }
+    #nextQuestionButton {
+      margin-top: 1em;
+      background-color: #0078d4;
+      color: white;
+    }
+
+    /* レスポンシブ対応 */
+    @media (max-width: 768px) {
+      input[type="text"], button {
+        width: 90%;
+        max-width: none;
+      }
+      .section {
+        max-width: 95%;
+      }
+      .video-container {
+        max-width: 100%;
+      }
+    }
+    @media (max-width: 480px) {
+      body {
+        margin: 10px;
+      }
+      .title h2 {
+        font-size: 1.2em;
+      }
+      button {
+        font-size: 1em;
+        padding: 0.5em 1em;
+      }
+      .quiz-options button {
+        font-size: 1em;
+        padding: 0.6em;
+      }
+    }
   </style>
 </head>
 <body>
@@ -67,14 +195,21 @@
   <input type="text" id="companyName" placeholder="例: 安全建設株式会社" />
   <p>あなたの名前を入力してください</p>  
   <input type="text" id="userName" placeholder="例: 安全太郎" />
-  <br />
   <p>※スペース（空白）は不要です</p>
+  <br />
   <button onclick="startVideo()">▶ 動画を開始する</button>
 </div>
 
 <div class="section hidden" id="videoSection">
   <div class="video-container">
-    <video id="trainingVideo" playsinline controls="false" disablePictureInPicture oncontextmenu="return false;">
+    <video
+      id="trainingVideo"
+      playsinline
+      controls="false"
+      controlslist="nodownload nofullscreen noremoteplayback"
+      disablePictureInPicture
+      oncontextmenu="return false;"
+    >
       <source src="training.mp4" type="video/mp4" />
       お使いのブラウザは video タグをサポートしていません。
     </video>
@@ -84,80 +219,338 @@
   </div>
 </div>
 
+<div class="section hidden" id="quizIntroSection">
+  <h3>e-Learning動画は以上です。</h3>
+  <p>次は動画の理解度チェックを行います。</p>
+  <button onclick="startQuiz()">動画の理解度チェックに進む</button>
+</div>
+
+<div class="section hidden" id="quizSection">
+  <div id="quizContainer">
+    <p>全3問のクイズに全問正解すると、受講完了登録に進めます。</p> 
+    <p class="quiz-question" id="quizQuestion"></p>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-message" id="quizMessage"></div>
+    <button id="nextQuestionButton" onclick="goToNextQuestion()" class="hidden">次へ進む</button>
+  </div>
+</div>
+
 <div class="section hidden" id="resultSection">
   <h3>以上で、今月のe-Learningは終了となります。</h3>
-  <p>今回の受講データを保存する場合はボタンを押してください。</p>
-  <div id="confirmationCode" style="display:none;"></div>
+  <p>受講データの保存が完了しました。</p>
+  <p>以下の確認コードをコピーして、フォームに入力してください。</p>
+  <div id="confirmationCode"></div>
+  <p style="font-size: 0.9em; margin-top: 0.5em; color: red; font-weight: bold;">
+    ※確認コードをコピーしてから、「受講完了登録に進む」を押してください。
+  </p>
   <br />
-  <button onclick="submitCompletion()">📄 今回の受講データを保存する</button>
-  <p id="submitMessage" style="margin-top: 1em; color: green; display: none;">保存が完了しました。お疲れさまでした！</p>
+  <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=JzxqYJ5BV0iDbmfkVvt5swEJNmwmImFKogaSKMNJmpZUOFBESThDMDVHRkY0OEw4VEhCUE9ZVEU2Ny4u"
+     target="_blank" rel="noopener noreferrer">
+    <button>📄 受講完了登録に進む</button>
+  </a>
+  <p id="submitMessage" style="margin-top: 1em; color: green;">お疲れさまでした！</p>
 </div>
 
 <script>
-let userName = "";
-function startVideo() {
-  const nameInput = document.getElementById("userName");
-  const companyInput = document.getElementById("companyName");
-  userName = nameInput.value.trim();
-  const company = companyInput.value.trim();
-
-  if (!company) {
-    alert("会社名を入力してください。");
-    return;
-  }
-  if (!userName || userName.length < 2) {
-    alert("名前を正しく入力してください。");
-    return;
-  }
-
-  document.getElementById("nameSection").classList.add("hidden");
-  document.getElementById("videoSection").classList.remove("hidden");
-  document.getElementById("trainingVideo").play();
-
-  // 動画終了後に結果セクション表示
-  document.getElementById("trainingVideo").addEventListener("ended", () => {
-    document.getElementById("videoSection").classList.add("hidden");
-    document.getElementById("resultSection").classList.remove("hidden");
-  });
-}
-
-function togglePlayback() {
-  const video = document.getElementById("trainingVideo");
-  if (video.paused) video.play();
-  else video.pause();
-}
-
-function generateCode(name) {
-  const firstCharCode = name.charCodeAt(0);
-  const lastCharCode = name.charCodeAt(name.length - 1);
-  const nameLength = name.length;
-  const day = new Date().getMonth() + 1;
-  const reversedDay = String(day + 11).padStart(2, "0").split("").reverse().join("");
-  return `${firstCharCode}-${lastCharCode}-${nameLength}-${reversedDay}`;
-}
-
-function submitCompletion() {
-  const company = document.getElementById("companyName").value.trim();
-  const name = userName;
-  const datetime = new Date().toLocaleString();
-  const code = generateCode(name);
-
-  fetch("https://script.google.com/macros/s/AKfycbzx5G9z8J3QwFCQn-jnGGO1sdgK4wiLjgnNd86oKpRPTfLh6NtrIgjQ3lelvu35iN2T/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/json",
+  let lastKnownTime = 0; // 動画の最終再生時刻を保持する変数
+  let userName = ""; // ユーザー名を保持する変数
+  
+  // クイズの問題データ（10問）
+  const quizQuestions = [
+    {
+      question: "警察署や労働基準監督署への報告は？",
+      options: ["元請にお願いして報告してもらう", "会社に連絡して報告してもらう", "ヤバそうだったので自分で報告する", "必要ない"],
+      answer: "元請にお願いして報告してもらう"
     },
-    body: JSON.stringify({
-      company: company,
-      name: name,
-      datetime: datetime,
-      code: code
-    })
-  });
+    {
+      question: "労災かどうかの判定を行うのは？",
+      options: ["労働基準監督署", "医師", "元請", "救急隊員"],
+      answer: "労働基準監督署"
+    },
+    {
+      question: "休業４日以上の災害が発生した場合、客先には何日以内に報告する？",
+      options: ["３日以内", "４日以内", "５日以内", "７日以内"],
+      answer: "３日以内"
+    },
+    {
+      question: "「労働者死傷病報告」が必要なときはどこに提出する？",
+      options: ["所轄の労働基準監督署", "所轄の税務署", "所轄の消防署", "所轄の森林管理署"],
+      answer: "所轄の労働基準監督署"
+    },
+    {
+      question: "警察署や労働基準監督署の事情聴取へは？",
+      options: ["元請けの指導に従い協力する", "怒られるので逃げる", "自分が悪者にならないように嘘をつく", "黙秘する"],
+      answer: "元請けの指導に従い協力する"
+    },
+    {
+      question: "病院の治療費や薬代がかかったときは？",
+      options: ["元請の担当者が作成した書類をそれぞれの箇所に提出する", "被災者の自腹", "現場担当社員の給料から引かれる", "事故の現場を見ていた人で割り勘"],
+      answer: "元請の担当者が作成した書類をそれぞれの箇所に提出する"
+    },
+    {
+      question: "「労災隠し」の罰とは？",
+      options: ["書類送検をされたり、５０万円以下の罰金刑", "警察と監督署に怒られる", "反省文", "何をされるかわからない"],
+      answer: "書類送検をされたり、５０万円以下の罰金刑"
+    },
+    {
+      question: "労働災害発生時の行動は誰の指示を仰ぐ？",
+      options: ["元請け", "職長", "自分で考えて行動する", "被災者本人"],
+      answer: "元請け"
+    },
+    {
+      question: "従業員が作業中に軽い擦り傷を負ったとき、正しい対応は？",
+      options: ["軽微なケガでも、まずは報告させる", "忙しいので、自己判断で処置して業務に戻らせる", "軽傷なので報告の必要はない", "大けがでなければ日報にだけ書けばよい"],
+      answer: "軽微なケガでも、まずは報告させる"
+    },
+    {
+      question: "次のうち、労災隠しを防止するために日常的にできることは？",
+      options: ["休憩の際や、その日の作業終了時に、ケガなどがなかったか報告させる", "作業員に「自己責任で対応するように」と伝える", "問題が起きたときだけヒアリングを行う", "作業員の無事を祈る"],
+      answer: "休憩の際や、その日の作業終了時に、ケガなどがなかったか報告させる"
+    }
+  ];
 
-  document.getElementById("submitMessage").style.display = "block";
-}
+  let selectedQuizQuestions = []; // 実際に表示する3問を格納
+  let currentQuestionIndex = 0; // 現在表示中のクイズのインデックス
+  let correctAnswersCount = 0; // 正解数
+
+  function startVideo() {
+    const nameInput = document.getElementById("userName");
+    const companyInput = document.getElementById("companyName");
+    userName = nameInput.value.trim(); // ユーザー名をグローバル変数に保存
+    const company = companyInput.value.trim();
+
+    // 1. 会社名チェック
+    if (!company) {
+      alert("会社名を入力してください。");
+      return;
+    }
+
+    // 2. 名前が空欄の場合
+    if (!userName) {
+      alert("名前を入力してください。");
+      return;
+    }
+
+    // 3. 名前の文字数チェック（3文字以上を許可）
+    if (userName.length < 3) {
+      alert("名前は3文字以上で入力してください。");
+      return;
+    }
+
+    // 4. 半角文字のチェック（全角ひらがな、カタカナ、漢字のみを許可）
+    const zenkakuRegex = /^[ぁ-んァ-ヶ一-龠]+$/;
+    if (!zenkakuRegex.test(userName)) {
+      alert("名前は全角のひらがな、カタカナ、または漢字で入力してください（スペースや半角文字は使用できません）。");
+      return;
+    }
+
+    // 名前入力セクションのみ非表示
+    document.getElementById("nameSection").classList.add("hidden");
+    document.getElementById("videoSection").classList.remove("hidden");
+
+    const video = document.getElementById("trainingVideo");
+
+    // シークバー操作を無効化
+    video.removeAttribute('controls'); 
+    
+    // 右クリック無効化
+    video.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    });
+    
+    // キーボードショートカット無効化
+    video.addEventListener('keydown', function(e) {
+      e.preventDefault();
+      return false;
+    });
+
+    // 動画の再生時刻が更新されるたびにチェック
+    video.addEventListener('timeupdate', function() {
+      // 早送り防止
+      if (video.currentTime > lastKnownTime + 1 && !video.paused) {
+        video.currentTime = lastKnownTime;
+      } else {
+        lastKnownTime = video.currentTime;
+      }
+    });
+
+    // シーク操作を無効化
+    video.addEventListener('seeking', function(e) {
+      e.preventDefault();
+      video.currentTime = lastKnownTime;
+    });
+    
+    video.play();
+
+    video.addEventListener("ended", () => {
+      document.getElementById("videoSection").classList.add("hidden");
+      document.getElementById("quizIntroSection").classList.remove("hidden");
+    });
+  }
+
+  function togglePlayback() {
+    const video = document.getElementById("trainingVideo");
+    if (video.paused) {
+      video.play();
+    } else {
+      video.pause();
+    }
+  }
+
+  // 配列をシャッフルする関数
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function startQuiz() {
+    document.getElementById("quizIntroSection").classList.add("hidden");
+    document.getElementById("quizSection").classList.remove("hidden");
+    
+    // クイズの状態をリセット
+    currentQuestionIndex = 0;
+    correctAnswersCount = 0;
+    document.getElementById("quizMessage").innerText = "";
+    document.getElementById("nextQuestionButton").classList.add("hidden");
+
+    // 10問からランダムに3問選択
+    selectedQuizQuestions = shuffleArray([...quizQuestions]).slice(0, 3);
+    
+    displayQuestion();
+  }
+
+  function displayQuestion() {
+    const questionContainer = document.getElementById("quizQuestion");
+    const optionsContainer = document.getElementById("quizOptions");
+    const messageContainer = document.getElementById("quizMessage");
+    const nextButton = document.getElementById("nextQuestionButton");
+
+    messageContainer.innerText = "";
+    nextButton.classList.add("hidden");
+
+    if (currentQuestionIndex < selectedQuizQuestions.length) {
+      const questionData = selectedQuizQuestions[currentQuestionIndex];
+      questionContainer.innerText = `Q${currentQuestionIndex + 1}. ${questionData.question}`;
+      optionsContainer.innerHTML = "";
+
+      // 選択肢をシャッフル
+      const shuffledOptions = shuffleArray([...questionData.options]);
+
+      shuffledOptions.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.innerText = option;
+        button.onclick = () => checkAnswer(option);
+        optionsContainer.appendChild(button);
+      });
+    } else {
+      // 全問解答済みの場合、結果を表示
+      showResult();
+    }
+  }
+
+  function checkAnswer(selectedOption) {
+    const questionData = selectedQuizQuestions[currentQuestionIndex];
+    const messageContainer = document.getElementById("quizMessage");
+    const optionsContainer = document.getElementById("quizOptions");
+    const nextButton = document.getElementById("nextQuestionButton");
+
+    // 全ての選択肢ボタンを無効化
+    Array.from(optionsContainer.children).forEach(button => {
+      button.disabled = true;
+    });
+
+    if (selectedOption === questionData.answer) {
+      correctAnswersCount++;
+      messageContainer.innerText = "正解です！";
+      messageContainer.classList.remove("incorrect");
+      messageContainer.classList.add("correct");
+    } else {
+      messageContainer.innerText = `不正解です。正解は「${questionData.answer}」でした。`;
+      messageContainer.classList.remove("correct");
+      messageContainer.classList.add("incorrect");
+    }
+
+    nextButton.classList.remove("hidden");
+  }
+
+  function goToNextQuestion() {
+    currentQuestionIndex++;
+    displayQuestion();
+  }
+
+  function showResult() {
+    const quizSection = document.getElementById("quizSection");
+    const resultSection = document.getElementById("resultSection");
+    const quizContainer = document.getElementById("quizContainer");
+
+    quizSection.classList.add("hidden");
+
+    if (correctAnswersCount === selectedQuizQuestions.length) {
+      // 全問正解の場合
+      const code = generateCode(userName);
+      
+      // スプレッドシートにデータを送信
+      submitToSpreadsheet(code);
+      
+      // 結果セクションを表示
+      resultSection.classList.remove("hidden");
+      document.getElementById("confirmationCode").innerText = code;
+    } else {
+      // 不正解がある場合
+      resultSection.classList.add("hidden");
+      quizContainer.innerHTML = `
+        <p>残念！全問正解ではありませんでした。再度挑戦してください。</p>
+        <button onclick="restartQuiz()">再度挑戦する</button>
+      `;
+      quizSection.classList.remove("hidden");
+    }
+  }
+
+  function restartQuiz() {
+    document.getElementById("quizContainer").innerHTML = `
+      <p>全3問のクイズに全問正解すると、受講完了登録に進めます。</p> 
+      <p class="quiz-question" id="quizQuestion"></p>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div class="quiz-message" id="quizMessage"></div>
+      <button id="nextQuestionButton" onclick="goToNextQuestion()" class="hidden">次へ進む</button>
+    `;
+    startQuiz();
+  }
+
+  function generateCode(name) {
+    const firstCharCode = name.charCodeAt(0);
+    const lastCharCode = name.charCodeAt(name.length - 1);
+    const nameLength = name.length;
+
+    const day = new Date().getMonth() + 1;
+    const dayPlus11 = String(day + 11).padStart(2, "0");
+    const reversedDay = dayPlus11.split("").reverse().join("");
+
+    return `${firstCharCode}-${lastCharCode}-${nameLength}-${reversedDay}`;
+  }
+
+  function submitToSpreadsheet(code) {
+    const company = document.getElementById("companyName").value.trim();
+    const timestamp = new Date().toLocaleString();
+
+    fetch("https://script.google.com/macros/s/AKfycbymwKMUUI7ertLjxxLvff-K1_tE-gYgCcx3jluNxoCTlGLiJtO0m2nYIBNYraUlVdFj/exec", {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        company: company,
+        name: userName,
+        datetime: timestamp,
+        code: code
+      })
+    });
+  }
 </script>
 
 </body>
