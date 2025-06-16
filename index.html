@@ -239,7 +239,7 @@
   <h3>以上で、今月のe-Learningは終了となります。</h3>
   <p>受講記録の保存ボタンを押してください。</p>
   <br />
-    <button>📄 受講記録を保存する。</button>
+    <button id="submitButton">📄 受講記録を保存する。</button>
   </a>
   <p id="submitMessage" style="margin-top: 1em; color: green;">お疲れさまでした！来月もよろしくお願いします。</p>
 </div>
@@ -502,7 +502,6 @@
       quizSection.classList.remove("hidden");
     }
   }
-
   function restartQuiz() {
     document.getElementById("quizContainer").innerHTML = `
       <p>全3問のクイズに全問正解すると、受講完了登録に進めます。</p> 
@@ -545,6 +544,19 @@
     });
   }
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const submitButton = document.getElementById("submitButton");
+    const submitMessage = document.getElementById("submitMessage");
+
+    submitButton.addEventListener("click", function () {
+      submitMessage.textContent = "保存しました。終了してください。";
+      submitMessage.style.color = "blue"; // 文字色を青に変更（任意）
+    });
+  });
+</script>
+
 
 </body>
 </html>
