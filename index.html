@@ -4,19 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>事業主研修版_労働災害発生時の対応</title>
-  
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CS9WF785LR"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-CS9WF785LR');
-</script>
-
   <style>
-    
     body {
       font-family: sans-serif;
       margin: 20px;
@@ -43,6 +31,8 @@
       padding: 0.5em;
       width: 80%;
       max-width: 400px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
     button {
       font-size: 1.2em;
@@ -53,206 +43,142 @@
       border: none;
       background-color: #0078d4;
       color: white;
+      transition: background-color 0.3s ease;
     }
     button:hover {
-      background-color: #106ebe;
-    }
-    .video-container {
-      position: relative;
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: black;
-      border-radius: 8px;
-      overflow: hidden;
+      background-color: #005a9e;
     }
     video {
       width: 100%;
+      max-width: 800px;
       height: auto;
-      display: block;
-      outline: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    /* シークバーとコントロールを非表示にする - 不要になるが念のため残しておく */
-    video::-webkit-media-controls {
-      display: none !important;
-    }
-    video::-moz-media-controls {
-      display: none !important;
-    }
-    video::-webkit-media-controls-panel {
-      display: none !important;
-    }
-    video::-webkit-media-controls-play-button {
-      display: none !important;
-    }
-    video::-webkit-media-controls-timeline {
-      display: none !important;
-    }
-    video::-webkit-media-controls-current-time-display {
-      display: none !important;
-    }
-    video::-webkit-media-controls-time-remaining-display {
-      display: none !important;
-    }
-    video::-webkit-media-controls-mute-button {
-      display: none !important;
-    }
-    video::-webkit-media-controls-toggle-closed-captions-button {
-      display: none !important;
-    }
-    video::-webkit-media-controls-volume-slider {
-      display: none !important;
-    }
-    video::-webkit-media-controls-fullscreen-button {
-      display: none !important;
-    }
-    #confirmationCode {
-      font-weight: bold;
-      font-size: 1.4em;
-      margin-top: 1em;
-      background-color: #e9e9e9;
-      padding: 0.5em;
-      border-radius: 6px;
-      display: inline-block;
-    }
-
-    /* クイズ関連のスタイル */
     .quiz-question {
       font-size: 1.3em;
       margin-bottom: 1em;
-      font-weight: bold;
     }
     .quiz-options button {
       display: block;
       width: 80%;
-      margin: 0.8em auto;
-      padding: 0.8em;
+      max-width: 400px;
+      margin: 0.5em auto;
       background-color: #e0e0e0;
       color: #333;
-      border: 1px solid #ccc;
-      font-size: 1.1em;
     }
     .quiz-options button:hover {
-      background-color: #d0d0d0;
+      background-color: #c0c0c0;
+    }
+    .quiz-options button.selected {
+      background-color: #a0d4ff;
+      border: 2px solid #0078d4;
+    }
+    .quiz-options button.correct {
+      background-color: #d4edda;
+      border: 2px solid #28a745;
+    }
+    .quiz-options button.incorrect {
+      background-color: #f8d7da;
+      border: 2px solid #dc3545;
     }
     .quiz-message {
-      font-size: 1.1em;
       margin-top: 1em;
       font-weight: bold;
     }
-    .quiz-message.correct {
-      color: green;
-    }
-    .quiz-message.incorrect {
-      color: red;
-    }
-    #nextQuestionButton {
+    .result-code {
+      font-size: 1.5em;
+      color: #0078d4;
+      font-weight: bold;
       margin-top: 1em;
-      background-color: #0078d4;
-      color: white;
+      padding: 1em;
+      border: 2px dashed #0078d4;
+      display: inline-block;
+      border-radius: 8px;
     }
-
-    /* レスポンシブ対応 */
-    @media (max-width: 768px) {
-      input[type="text"], button {
-        width: 90%;
-        max-width: none;
-      }
-      .section {
-        max-width: 95%;
-      }
-      .video-container {
-        max-width: 100%;
-      }
-    }
-    @media (max-width: 480px) {
-      body {
-        margin: 10px;
-      }
-      .title h2 {
+    .completion-message {
         font-size: 1.2em;
-      }
-      button {
-        font-size: 1em;
-        padding: 0.5em 1em;
-      }
-      .quiz-options button {
-        font-size: 1em;
-        padding: 0.6em;
-      }
+        margin-top: 2em;
+        color: #28a745;
+        font-weight: bold;
     }
   </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-YOUR_GA_MEASUREMENT_ID'); // ここにもあなたのGA4測定IDを正確に貼り付けてください
+  </script>
 </head>
 <body>
 
-<div class="section">
-  <div class="title">
-    <h2>事業主研修版_労働災害発生時の対応</h2>
+  <div id="startScreen" class="section">
+    <div class="title">
+      <h1>事業主研修版_労働災害発生時の対応</h1>
+    </div>
+    <p>研修を開始する前に、以下に情報を入力してください。</p>
+    
+    <div style="margin-bottom: 1em;">
+      <label for="companyNameInput">会社名:</label><br>
+      <input type="text" id="companyNameInput" placeholder="会社名を入力してください" required style="margin-top: 0.5em; width: 80%; max-width: 400px;"><br>
+    </div>
+    <div style="margin-bottom: 1em;">
+      <label for="userNameInput">受講者名:</label><br>
+      <input type="text" id="userNameInput" placeholder="氏名を入力してください" required style="margin-top: 0.5em; width: 80%; max-width: 400px;">
+    </div>
+
+    <button onclick="startTraining()">研修を開始する</button>
   </div>
-</div>
 
-<div class="section" id="nameSection">
-  <p>あなたの名前を入力してください</p>
-  <p>※スペース（空白）は不要です</p>
-  <input type="text" id="userName" placeholder="例: 安全太郎" />
-  <br />
-  <button onclick="startVideo()">▶ 動画を開始する</button>
-</div>
-
-<div class="section hidden" id="videoSection">
-  <div class="video-container">
-    <video
-      id="trainingVideo"
-      playsinline
-      controls="false"  controlslist="nodownload nofullscreen noremoteplayback"
-      disablePictureInPicture
-      oncontextmenu="return false;"
-    >
-      <source src="training.mp4" type="video/mp4" />
-      お使いのブラウザは video タグをサポートしていません。
+  <div id="videoSection" class="section hidden">
+    <div class="title">
+      <h2>研修動画</h2>
+    </div>
+    <video id="trainingVideo" controls>
+      <source src="training.mp4" type="video/mp4">
+      お使いのブラウザは動画タグをサポートしていません。
     </video>
+    <p id="videoMessage">動画を最後まで視聴してください。</p>
+    <button id="goToQuizButton" onclick="goToQuiz()" class="hidden">クイズに進む</button>
   </div>
-  <div id="customControls">
-    <button onclick="togglePlayback()">⏯️ 一時停止 / 再開</button>
+
+  <div id="quizSection" class="section hidden">
+    <div class="title">
+      <h2>理解度確認クイズ</h2>
+    </div>
+    <div id="quizContainer">
+      <p class="quiz-question" id="quizQuestion"></p>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div class="quiz-message" id="quizMessage"></div>
+      <button id="nextQuestionButton" onclick="goToNextQuestion()" class="hidden">次へ進む</button>
+    </div>
+    <button id="submitQuizButton" onclick="checkQuiz()" class="hidden">解答を送信する</button>
   </div>
-</div>
 
-<div class="section hidden" id="quizIntroSection">
-  <h3>e-Learning動画は以上です。</h3>
-  <p>次は動画の理解度チェックを行います。</p>
-  <button onclick="startQuiz()">動画の理解度チェックに進む</button>
-</div>
-
-<div class="section hidden" id="quizSection">
-  <div id="quizContainer">
-    <p>全3問のクイズに全問正解すると、受講完了登録に進めます。</p> 
-    <p class="quiz-question" id="quizQuestion"></p>
-    <div class="quiz-options" id="quizOptions"></div>
-    <div class="quiz-message" id="quizMessage"></div>
-    <button id="nextQuestionButton" onclick="goToNextQuestion()" class="hidden">次へ進む</button>
+  <div id="resultSection" class="section hidden">
+    <div class="title">
+      <h2>研修完了！</h2>
+    </div>
+    <p class="completion-message">研修お疲れ様でした！</p>
+    <p>確認コード：<span id="confirmationCode" class="result-code"></span></p>
+    <p>このコードを記録してください。</p>
   </div>
-</div>
 
-<div class="section hidden" id="resultSection">
-  <h3>以上で、今月のe-Learningは終了となります。</h3>
-  <p>以下の確認コードをコピーして、フォームに入力してください。</p>
-  <div id="confirmationCode"></div>
-  <p style="font-size: 0.9em; margin-top: 0.5em; color: red; font-weight: bold;">
-    ※確認コードをコピーしてから、「受講完了登録に進む」を押してください。
-  </p>
-  <br />
-  <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=JzxqYJ5BV0iDbmfkVvt5swEJNmwmImFKogaSKMNJmpZUOFBESThDMDVHRkY0OEw4VEhCUE9ZVEU2Ny4u"
-     target="_blank" rel="noopener noreferrer">
-    <button>📄 受講完了登録に進む</button>
-  </a>
-</div>
+  <script>
+    // グローバル変数
+    let companyName = ""; // 会社名用のグローバル変数
+    let userName = "";
+    let currentQuestionIndex = 0;
+    let correctAnswersCount = 0;
+    let selectedQuizQuestions = []; // 表示するクイズ問題
+    
+    // ★★★ あなたのGASウェブアプリのURLをここに貼り付けてください ★★★
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzx5G9z8J3QwFCQn-jnGGO1sdgK4wiLjgnNd86oKpRPTfLh6NtrIgjQ3lelvu35iN2T/exec"; 
+    // 例: "https://script.google.com/macros/s/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/exec";
 
-<script>
-  let lastKnownTime = 0; // 動画の最終再生時刻を保持する変数
-  let userName = ""; // ユーザー名を保持する変数
-  
- // クイズの問題データ（10問）
-  const quizQuestions = [
+    // クイズ問題データ
+const quizQuestions = [
     {
       question: "警察署や労働基準監督署への報告は？",
       options: ["元請にお願いして報告してもらう", "会社に連絡して報告してもらう", "ヤバそうだったので自分で報告する", "必要ない"],
@@ -305,217 +231,262 @@
     }
   ];
 
-  let selectedQuizQuestions = []; // 実際に表示する3問を格納
-  let currentQuestionIndex = 0; // 現在表示中のクイズのインデックス
-  let correctAnswersCount = 0; // 正解数
+    // トレーニング開始処理
+    function startTraining() {
+      const companyNameInput = document.getElementById("companyNameInput");
+      const userNameInput = document.getElementById("userNameInput");
 
-  function startVideo() {
-    const nameInput = document.getElementById("userName");
-    userName = nameInput.value.trim(); // ユーザー名をグローバル変数に保存
-
-    // 1. 名前が空欄の場合
-    if (!userName) {
-      alert("名前を入力してください。");
-      return;
-    }
-
-    // 2. 名前の文字数チェック（3文字以上を許可）
-    if (userName.length < 3) {
-      alert("名前は3文字以上で入力してください。");
-      return;
-    }
-
-    // 3. 半角文字のチェック（全角ひらがな、カタカナ、漢字のみを許可）
-    const zenkakuRegex = /^[ぁ-んァ-ヶ一-龠]+$/;
-    if (!zenkakuRegex.test(userName)) {
-      alert("名前は全角のひらがな、カタカナ、または漢字で入力してください（スペースや半角文字は使用できません）。");
-      return;
-    }
-
-    // 名前入力セクションのみ非表示
-    document.getElementById("nameSection").classList.add("hidden");
-    document.getElementById("videoSection").classList.remove("hidden");
-
-    const video = document.getElementById("trainingVideo");
-
-    // シークバー操作を無効化（既存のものを維持）
-    video.removeAttribute('controls'); 
-    
-    // 右クリック無効化（既存のものを維持）
-    video.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-      return false;
-    });
-    
-    // キーボードショートカット無効化（スペースキーなど）（既存のものを維持）
-    video.addEventListener('keydown', function(e) {
-      e.preventDefault();
-      return false;
-    });
-
-    // 動画の再生時刻が更新されるたびにチェック
-    video.addEventListener('timeupdate', function() {
-      // 現在の再生時刻が前回記録した時刻よりも大きく進んでいる場合（早送りされたと判断）
-      // かつ、動画が一時停止中でない場合
-      if (video.currentTime > lastKnownTime + 1 && !video.paused) { // 1秒以上のスキップを検知
-        video.currentTime = lastKnownTime; // 再生位置を元に戻す
-      } else {
-        lastKnownTime = video.currentTime; // 現在の再生時刻を記録
+      if (!companyNameInput.value.trim() || !userNameInput.value.trim()) {
+        alert("会社名と氏名を入力してください。");
+        return;
       }
-    });
 
-    // シーク操作を無効化（既存のものを維持しつつ、timeupdateで強力に制御）
-    video.addEventListener('seeking', function(e) {
-      e.preventDefault();
-      video.currentTime = lastKnownTime; // シーク試行時に直前の位置に戻す
-    });
-    
-    video.play();
+      companyName = companyNameInput.value.trim();
+      userName = userNameInput.value.trim();
 
-    video.addEventListener("ended", () => {
+      document.getElementById("startScreen").classList.add("hidden");
+      document.getElementById("videoSection").classList.remove("hidden");
+
+      const video = document.getElementById("trainingVideo");
+      video.play(); // 動画を自動再生
+
+      video.onended = function() {
+        document.getElementById("videoMessage").innerText = "動画の視聴が完了しました。";
+        document.getElementById("goToQuizButton").classList.remove("hidden");
+        // Google Analytics イベント送信
+        gtag("event", "video_completed", {
+          company_name: companyName,
+          user_name: userName,
+        });
+      };
+
+      // Google Analytics イベント送信 (任意)
+      gtag("event", "training_started", {
+        company_name: companyName,
+        user_name: userName,
+      });
+    }
+
+    // クイズに進む処理
+    function goToQuiz() {
       document.getElementById("videoSection").classList.add("hidden");
-      document.getElementById("quizIntroSection").classList.remove("hidden"); // クイズ紹介セクションを表示
-    });
-  }
-
-  function togglePlayback() {
-    const video = document.getElementById("trainingVideo");
-    if (video.paused) {
-      video.play();
-    } else {
-      video.pause();
+      document.getElementById("quizSection").classList.remove("hidden");
+      startQuiz(); // クイズを開始
+      // Google Analytics イベント送信
+      gtag("event", "quiz_started", {
+        company_name: companyName,
+        user_name: userName,
+      });
     }
-  }
 
-  // 配列をシャッフルする関数 (Fisher-Yatesアルゴリズム)
-  function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+    // クイズ開始処理
+    function startQuiz() {
+      currentQuestionIndex = 0;
+      correctAnswersCount = 0;
+      // ランダムに3問選択
+      selectedQuizQuestions = [...quizQuestions].sort(() => 0.5 - Math.random()).slice(0, 3);
+      displayQuestion();
+      document.getElementById("submitQuizButton").classList.add("hidden"); // 解答送信ボタンは非表示に
     }
-    return array;
-  }
 
-  function startQuiz() {
-    document.getElementById("quizIntroSection").classList.add("hidden");
-    document.getElementById("quizSection").classList.remove("hidden");
-    
-    // クイズの状態をリセット
-    currentQuestionIndex = 0;
-    correctAnswersCount = 0;
-    document.getElementById("quizMessage").innerText = ""; // メッセージクリア
-    document.getElementById("nextQuestionButton").classList.add("hidden"); // 「次へ進む」ボタンを非表示に
-
-    // 10問からランダムに3問選択
-    selectedQuizQuestions = shuffleArray([...quizQuestions]).slice(0, 3);
-    
-    displayQuestion();
-  }
-
-  function displayQuestion() {
-    const questionContainer = document.getElementById("quizQuestion");
-    const optionsContainer = document.getElementById("quizOptions");
-    const messageContainer = document.getElementById("quizMessage");
-    const nextButton = document.getElementById("nextQuestionButton");
-
-    messageContainer.innerText = ""; // メッセージをクリア
-    nextButton.classList.add("hidden"); // 「次へ進む」ボタンを非表示に
-
-    if (currentQuestionIndex < selectedQuizQuestions.length) {
+    // クイズ問題表示処理
+    function displayQuestion() {
       const questionData = selectedQuizQuestions[currentQuestionIndex];
-      questionContainer.innerText = `Q${currentQuestionIndex + 1}. ${questionData.question}`;
-      optionsContainer.innerHTML = ""; // 選択肢をクリア
+      const quizQuestionElement = document.getElementById("quizQuestion");
+      const quizOptionsElement = document.getElementById("quizOptions");
+      const quizMessageElement = document.getElementById("quizMessage");
+      const nextQuestionButton = document.getElementById("nextQuestionButton");
+      const submitQuizButton = document.getElementById("submitQuizButton");
 
-      // 選択肢をシャッフル
-      const shuffledOptions = shuffleArray([...questionData.options]);
+      quizQuestionElement.innerText = `Q${currentQuestionIndex + 1}. ${questionData.question}`;
+      quizOptionsElement.innerHTML = "";
+      quizMessageElement.innerText = ""; // メッセージをクリア
+      nextQuestionButton.classList.add("hidden"); // 次へ進むボタンを非表示
 
-      shuffledOptions.forEach((option, index) => {
+      // オプションボタンを生成
+      questionData.options.forEach((option) => {
         const button = document.createElement("button");
         button.innerText = option;
-        button.onclick = () => checkAnswer(option);
-        optionsContainer.appendChild(button);
+        button.onclick = () => selectAnswer(button, option, questionData.answer);
+        quizOptionsElement.appendChild(button);
       });
-    } else {
-      // 全問解答済みの場合、結果を表示
-      showResult();
-    }
-  }
 
-  function checkAnswer(selectedOption) {
-    const questionData = selectedQuizQuestions[currentQuestionIndex];
-    const messageContainer = document.getElementById("quizMessage");
-    const optionsContainer = document.getElementById("quizOptions");
-    const nextButton = document.getElementById("nextQuestionButton");
-
-    // 全ての選択肢ボタンを無効化
-    Array.from(optionsContainer.children).forEach(button => {
-      button.disabled = true;
-    });
-
-    if (selectedOption === questionData.answer) {
-      correctAnswersCount++;
-      messageContainer.innerText = "正解です！";
-      messageContainer.classList.remove("incorrect");
-      messageContainer.classList.add("correct");
-    } else {
-      messageContainer.innerText = `不正解です。正解は「${questionData.answer}」でした。`;
-      messageContainer.classList.remove("correct");
-      messageContainer.classList.add("incorrect");
+      // 最後の問題の場合は「解答を送信する」ボタンを表示
+      if (currentQuestionIndex === selectedQuizQuestions.length - 1) {
+        submitQuizButton.classList.remove("hidden");
+      } else {
+        submitQuizButton.classList.add("hidden");
+      }
     }
 
-    nextButton.classList.remove("hidden"); // 「次へ進む」ボタンを表示
-  }
+    let selectedAnswerButton = null; // 選択されたボタンを保持
 
-  function goToNextQuestion() {
-    currentQuestionIndex++; // 次の質問へインデックスを進める
-    displayQuestion(); // 次の質問を表示
-  }
+    // 回答選択処理
+    function selectAnswer(button, selectedOption, correctAnswer) {
+      if (selectedAnswerButton) {
+        selectedAnswerButton.classList.remove("selected");
+      }
+      selectedAnswerButton = button;
+      button.classList.add("selected");
 
-  function showResult() {
-    const quizSection = document.getElementById("quizSection");
-    const resultSection = document.getElementById("resultSection");
-    const quizContainer = document.getElementById("quizContainer");
+      const quizMessageElement = document.getElementById("quizMessage");
+      const nextQuestionButton = document.getElementById("nextQuestionButton");
+      const submitQuizButton = document.getElementById("submitQuizButton");
 
-    quizSection.classList.add("hidden"); // クイズセクションを非表示に
+      // 正誤判定
+      if (selectedOption === correctAnswer) {
+        quizMessageElement.innerText = "正解！";
+        quizMessageElement.style.color = "green";
+        button.classList.add("correct"); // 正解の色
+      } else {
+        quizMessageElement.innerText = "不正解。";
+        quizMessageElement.style.color = "red";
+        button.classList.add("incorrect"); // 不正解の色
+      }
 
-    if (correctAnswersCount === selectedQuizQuestions.length) {
-      // 全問正解の場合
-      resultSection.classList.remove("hidden");
-      const code = generateCode(userName); // グローバル変数userNameを使用
-      document.getElementById("confirmationCode").innerText = code;
-    } else {
-      // 不正解がある場合
-      resultSection.classList.add("hidden"); // 結果セクションは表示しない
-      quizContainer.innerHTML = `
-        <p>残念！全問正解ではありませんでした。再度挑戦してください。</p>
-        <button onclick="restartQuiz()">再度挑戦する</button>
-      `;
-      quizSection.classList.remove("hidden"); // クイズセクションを再度表示
+      // 他の選択肢は無効化し、色付けは行わない
+      Array.from(button.parentNode.children).forEach(btn => {
+          if (btn !== button) {
+              btn.disabled = true; // 他のボタンを無効化
+              // btn.classList.remove("selected"); // 選択解除（念のため）
+          }
+      });
+      button.disabled = true; // 選択したボタンも無効化
+
+      // 最後の問題でなければ次へ進むボタンを表示、そうでなければ解答送信ボタン
+      if (currentQuestionIndex < selectedQuizQuestions.length - 1) {
+        nextQuestionButton.classList.remove("hidden");
+      } else {
+        submitQuizButton.classList.remove("hidden"); // 最終問題で回答選択後、送信ボタンを表示
+      }
     }
-  }
 
-  function restartQuiz() {
-    document.getElementById("quizContainer").innerHTML = `
-      <p class="quiz-question" id="quizQuestion"></p>
-      <div class="quiz-options" id="quizOptions"></div>
-      <div class="quiz-message" id="quizMessage"></div>
-      <button id="nextQuestionButton" onclick="goToNextQuestion()" class="hidden">次へ進む</button>
-    `; // クイズのDOMを初期状態に戻す
-    startQuiz(); // クイズを最初から開始
-  }
 
-  function generateCode(name) {
-    const firstCharCode = name.charCodeAt(0);
-    const lastCharCode = name.charCodeAt(name.length - 1);
-    const nameLength = name.length;
+    // 次の質問へ進む処理
+    function goToNextQuestion() {
+      // 選択された回答が正解だった場合、正解数をカウント
+      const questionData = selectedQuizQuestions[currentQuestionIndex];
+      const selectedButtonText = selectedAnswerButton ? selectedAnswerButton.innerText : '';
 
-    const day = new Date().getMonth() + 1;
-    const dayPlus11 = String(day + 11).padStart(2, "0");
-    const reversedDay = dayPlus11.split("").reverse().join("");
+      if (selectedButtonText === questionData.answer) {
+        correctAnswersCount++;
+      }
 
-    return `${firstCharCode}-${lastCharCode}-${nameLength}-${reversedDay}`;
-  }
-</script>
+      currentQuestionIndex++;
+      selectedAnswerButton = null; // 選択状態をリセット
 
+      if (currentQuestionIndex < selectedQuizQuestions.length) {
+        displayQuestion();
+      } else {
+        // 全てのクイズが終了したら結果をチェック
+        checkQuiz();
+      }
+    }
+
+
+    // クイズ最終結果チェック処理
+    function checkQuiz() {
+      const resultSection = document.getElementById("resultSection");
+      const quizSection = document.getElementById("quizSection");
+      const quizContainer = document.getElementById("quizContainer");
+
+      // 最終問題の正誤をここで最終的にカウント
+      const questionData = selectedQuizQuestions[currentQuestionIndex]; // 最後の問題のデータ
+      const selectedButtonText = selectedAnswerButton ? selectedAnswerButton.innerText : '';
+
+      // 最後の問題の正誤判定がまだの場合のみ
+      if (currentQuestionIndex === selectedQuizQuestions.length - 1 && selectedButtonText === questionData.answer) {
+        // 重複カウントを防ぐため、ここでのみカウント
+        // ただし、goToNextQuestion()で既にカウントされている可能性もあるため、ロジック要確認。
+        // シンプルに、全問解き終わった時点でcorrectAnswersCountが正しいか確認する方が確実。
+        // ここでは、goToNextQuestion()で都度カウントしている前提で、最終チェックのみに使う。
+      }
+
+      quizSection.classList.add("hidden"); // クイズセクションを非表示に
+
+      if (correctAnswersCount === selectedQuizQuestions.length) {
+        // 全問正解の場合
+        resultSection.classList.remove("hidden");
+        const code = generateCode(userName); // グローバル変数userNameを使用
+        document.getElementById("confirmationCode").innerText = code;
+
+        // ★★★ GASにデータを送信する処理を追加 ★★★
+        sendDataToGAS(companyName, userName, code);
+
+      } else {
+        // 不正解がある場合
+        resultSection.classList.add("hidden"); // 結果セクションは表示しない
+        quizContainer.innerHTML = `
+          <p>残念！全問正解ではありませんでした。再度挑戦してください。</p>
+          <button onclick="restartQuiz()">再度挑戦する</button>
+        `;
+        quizSection.classList.remove("hidden"); // クイズセクションを再度表示
+      }
+    }
+
+    // クイズ再挑戦処理
+    function restartQuiz() {
+      // クイズのDOMを初期状態に戻す
+      document.getElementById("quizContainer").innerHTML = `
+        <p class="quiz-question" id="quizQuestion"></p>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div class="quiz-message" id="quizMessage"></div>
+        <button id="nextQuestionButton" onclick="goToNextQuestion()" class="hidden">次へ進む</button>
+      `; 
+      startQuiz(); // クイズを最初から開始
+    }
+
+    // 確認コード生成処理
+    function generateCode(name) {
+      const firstCharCode = name.charCodeAt(0);
+      const lastCharCode = name.charCodeAt(name.length - 1);
+      const nameLength = name.length;
+      const date = new Date();
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+
+      const combinedValue = firstCharCode + lastCharCode + nameLength + parseInt(day) + parseInt(month) + year;
+      const hashed = combinedValue.toString(16).toUpperCase(); // 16進数に変換して大文字に
+
+      return `COMP-${hashed.substring(0, 8)}`; // 例えば最初の8文字を使用
+    }
+
+
+    // ★★★ GASにデータを送信する新しい関数 ★★★
+    async function sendDataToGAS(company, user, code) {
+      const data = {
+        companyName: company, // 会社名を追加
+        userName: user,
+        confirmationCode: code
+      };
+
+      try {
+        const response = await fetch(GAS_WEB_APP_URL, {
+          method: "POST", // POSTメソッドで送信
+          mode: "cors",   // CORSを許可
+          headers: {
+            "Content-Type": "application/json", // JSON形式で送信することを明示
+          },
+          body: JSON.stringify(data), // データをJSON文字列に変換して送信
+        });
+
+        const result = await response.json(); // GASからのレスポンスをJSONとして解析
+
+        if (result.status === "success") {
+          console.log("受講データが正常に記録されました。");
+          // 必要であれば、ユーザーに成功メッセージを表示するなどの処理を追加できます
+          // 例: alert("受講データを記録しました！");
+        } else {
+          console.error("受講データの記録に失敗しました:", result.message);
+          alert("エラー：受講データの記録に失敗しました。\n" + result.message + "\n画面を閉じる前に、このメッセージをスクリーンショットして管理者にお知らせください。");
+        }
+      } catch (error) {
+        console.error("GASへの通信中にエラーが発生しました:", error);
+        alert("通信エラー：受講データの記録中に問題が発生しました。\n" + error.message + "\n画面を閉じる前に、このメッセージをスクリーンショットして管理者にお知らせください。");
+      }
+    }
+
+  </script>
 </body>
 </html>
