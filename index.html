@@ -249,7 +249,6 @@
 <div class="section hidden" id="resultSection">
   <h3>以上で、今月のe-Learningは終了となります。</h3>
   <p>受講記録の保存ボタンを押してください。</p>
-  <div id="confirmationCode"></div>
   <br />
   <button id="submitButton">📄 保存して終了する</button>
   <p id="submitMessage" style="margin-top: 1em; color: green;" class="hidden">お疲れさまでした！来月もよろしくお願いします。</p>
@@ -259,7 +258,6 @@
   let lastKnownTime = 0; // 動画の最終再生時刻を保持する変数
   let userName = ""; // ユーザー名を保持する変数
   let companyName = ""; // 会社名を保持する変数
-  let completionCode = ""; // 完了コードを保持する変数
   let deviceInfo = ""; // デバイス情報を保持する変数
 
   // デバイス情報を生成する関数
@@ -555,12 +553,10 @@
 
     if (correctAnswersCount === selectedQuizQuestions.length) {
       // 全問正解の場合
-      completionCode = generateCode(userName);
       deviceInfo = generateDeviceInfo(); // デバイス情報を生成
       
       // 結果セクションを表示
       resultSection.classList.remove("hidden");
-      document.getElementById("confirmationCode").innerText = `完了コード: ${completionCode}`;
     } else {
       // 不正解がある場合
       resultSection.classList.add("hidden");
