@@ -180,6 +180,13 @@
         padding: 0.6em;
       }
     }
+
+    /* エラーメッセージ用のスタイル */
+    .error-message {
+      color: red;
+      font-weight: bold;
+      margin-top: 1em;
+    }
   </style>
 </head>
 <body>
@@ -198,6 +205,7 @@
   <p>※スペース（空白）は不要です</p>
   <br />
   <button onclick="startVideo()">▶ 動画を開始する</button>
+  <div id="errorMessage" class="error-message hidden"></div>
 </div>
 
 <div class="section hidden" id="videoSection">
@@ -216,6 +224,9 @@
   </div>
   <div id="customControls">
     <button onclick="togglePlayback()">⏯️ 一時停止 / 再開</button>
+  </div>
+  <div id="videoError" class="error-message hidden">
+    動画ファイルが見つかりません。training.mp4 ファイルを確認してください。
   </div>
 </div>
 
@@ -238,15 +249,51 @@
 <div class="section hidden" id="resultSection">
   <h3>以上で、今月のe-Learningは終了となります。</h3>
   <p>受講記録の保存ボタンを押してください。</p>
+  <div id="confirmationCode"></div>
   <br />
-    <button id="submitButton">📄 受講記録を保存する。</button>
-  </a>
-  <p id="submitMessage" style="margin-top: 1em; color: green;">お疲れさまでした！来月もよろしくお願いします。</p>
+  <button id="submitButton">📄 保存して終了する</button>
+  <p id="submitMessage" style="margin-top: 1em; color: green;" class="hidden">お疲れさまでした！来月もよろしくお願いします。</p>
 </div>
 
 <script>
   let lastKnownTime = 0; // 動画の最終再生時刻を保持する変数
   let userName = ""; // ユーザー名を保持する変数
+  let companyName = ""; // 会社名を保持する変数
+  let completionCode = ""; // 完了コードを保持する変数
+  let deviceInfo = ""; // デバイス情報を保持する変数
+
+  // デバイス情報を生成する関数
+  function generateDeviceInfo() {
+    const userAgent = navigator.userAgent;
+    let os = "Unknown OS";
+    let browser = "Unknown Browser";
+    
+    // OS判定
+    if (userAgent.indexOf("Windows") !== -1) {
+      os = "Windows";
+    } else if (userAgent.indexOf("Mac") !== -1) {
+      os = "Mac";
+    } else if (userAgent.indexOf("Linux") !== -1) {
+      os = "Linux";
+    } else if (userAgent.indexOf("Android") !== -1) {
+      os = "Android";
+    } else if (userAgent.indexOf("iPhone") !== -1 || userAgent.indexOf("iPad") !== -1) {
+      os = "iOS";
+    }
+    
+    // ブラウザ判定
+    if (userAgent.indexOf("Chrome") !== -1 && userAgent.indexOf("Edge") === -1) {
+      browser = "Chrome";
+    } else if (userAgent.indexOf("Firefox") !== -1) {
+      browser = "Firefox";
+    } else if (userAgent.indexOf("Safari") !== -1 && userAgent.indexOf("Chrome") === -1) {
+      browser = "Safari";
+    } else if (userAgent.indexOf("Edge") !== -1) {
+      browser = "Edge";
+    }
+    
+    return `${os} / ${browser}`;
+  }
   
   // クイズの問題データ（10問）
   const quizQuestions = [
@@ -306,34 +353,47 @@
   let currentQuestionIndex = 0; // 現在表示中のクイズのインデックス
   let correctAnswersCount = 0; // 正解数
 
+  function showError(message) {
+    const errorElement = document.getElementById("errorMessage");
+    errorElement.textContent = message;
+    errorElement.classList.remove("hidden");
+  }
+
+  function hideError() {
+    const errorElement = document.getElementById("errorMessage");
+    errorElement.classList.add("hidden");
+  }
+
   function startVideo() {
     const nameInput = document.getElementById("userName");
     const companyInput = document.getElementById("companyName");
     userName = nameInput.value.trim(); // ユーザー名をグローバル変数に保存
-    const company = companyInput.value.trim();
+    companyName = companyInput.value.trim(); // 会社名をグローバル変数に保存
+
+    hideError(); // エラーメッセージをクリア
 
     // 1. 会社名チェック
-    if (!company) {
-      alert("会社名を入力してください。");
+    if (!companyName) {
+      showError("会社名を入力してください。");
       return;
     }
 
     // 2. 名前が空欄の場合
     if (!userName) {
-      alert("名前を入力してください。");
+      showError("名前を入力してください。");
       return;
     }
 
     // 3. 名前の文字数チェック（3文字以上を許可）
     if (userName.length < 3) {
-      alert("名前は3文字以上で入力してください。");
+      showError("名前は3文字以上で入力してください。");
       return;
     }
 
     // 4. 半角文字のチェック（全角ひらがな、カタカナ、漢字のみを許可）
     const zenkakuRegex = /^[ぁ-んァ-ヶ一-龠]+$/;
     if (!zenkakuRegex.test(userName)) {
-      alert("名前は全角のひらがな、カタカナ、または漢字で入力してください（スペースや半角文字は使用できません）。");
+      showError("名前は全角のひらがな、カタカナ、または漢字で入力してください（スペースや半角文字は使用できません）。");
       return;
     }
 
@@ -342,6 +402,11 @@
     document.getElementById("videoSection").classList.remove("hidden");
 
     const video = document.getElementById("trainingVideo");
+
+    // 動画ファイルのエラーチェック
+    video.addEventListener('error', function() {
+      document.getElementById("videoError").classList.remove("hidden");
+    });
 
     // シークバー操作を無効化
     video.removeAttribute('controls'); 
@@ -374,7 +439,11 @@
       video.currentTime = lastKnownTime;
     });
     
-    video.play();
+    // 動画の再生を試行
+    video.play().catch(function(error) {
+      console.error('Video play failed:', error);
+      document.getElementById("videoError").classList.remove("hidden");
+    });
 
     video.addEventListener("ended", () => {
       document.getElementById("videoSection").classList.add("hidden");
@@ -385,7 +454,9 @@
   function togglePlayback() {
     const video = document.getElementById("trainingVideo");
     if (video.paused) {
-      video.play();
+      video.play().catch(function(error) {
+        console.error('Video play failed:', error);
+      });
     } else {
       video.pause();
     }
@@ -484,14 +555,12 @@
 
     if (correctAnswersCount === selectedQuizQuestions.length) {
       // 全問正解の場合
-      const code = generateCode(userName);
-      
-      // スプレッドシートにデータを送信
-      submitToSpreadsheet(code);
+      completionCode = generateCode(userName);
+      deviceInfo = generateDeviceInfo(); // デバイス情報を生成
       
       // 結果セクションを表示
       resultSection.classList.remove("hidden");
-      document.getElementById("confirmationCode").innerText = code;
+      document.getElementById("confirmationCode").innerText = `完了コード: ${completionCode}`;
     } else {
       // 不正解がある場合
       resultSection.classList.add("hidden");
@@ -502,6 +571,7 @@
       quizSection.classList.remove("hidden");
     }
   }
+
   function restartQuiz() {
     document.getElementById("quizContainer").innerHTML = `
       <p>全3問のクイズに全問正解すると、受講完了登録に進めます。</p> 
@@ -526,37 +596,44 @@
   }
 
   function submitToSpreadsheet(code) {
-    const company = document.getElementById("companyName").value.trim();
     const timestamp = new Date().toLocaleString();
 
-    fetch("https://script.google.com/macros/s/AKfycbymwKMUUI7ertLjxxLvff-K1_tE-gYgCcx3jluNxoCTlGLiJtO0m2nYIBNYraUlVdFj/exec", {
+    return fetch("https://script.google.com/macros/s/AKfycbymwKMUUI7ertLjxxLvff-K1_tE-gYgCcx3jluNxoCTlGLiJtO0m2nYIBNYraUlVdFj/exec", {
       method: "POST",
       mode: "no-cors",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        company: company,
+        company: companyName,
         name: userName,
         datetime: timestamp,
         code: deviceInfo
       })
+    }).catch(function(error) {
+      console.error('スプレッドシート送信エラー:', error);
     });
   }
-</script>
 
-<script>
+  // ページ読み込み後の処理
   document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.getElementById("submitButton");
     const submitMessage = document.getElementById("submitMessage");
 
     submitButton.addEventListener("click", function () {
+      // スプレッドシートにデータを送信
+      submitToSpreadsheet(deviceInfo);
+      
+      // メッセージを表示
       submitMessage.textContent = "保存しました。終了してください。";
-      submitMessage.style.color = "blue"; // 文字色を青に変更（任意）
+      submitMessage.style.color = "blue";
+      submitMessage.classList.remove("hidden");
+      
+      // ボタンを非表示にする
+      submitButton.style.display = "none";
     });
   });
 </script>
-
 
 </body>
 </html>
