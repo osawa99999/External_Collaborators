@@ -349,7 +349,8 @@
   <p>当社担当者が判別出来れば名称は簡易的なものでも大丈夫です。</p>
   <p>※スペース（空白）は不要です</p>
   <br />
-  <button onclick="startVideo()">▶ 動画を開始する</button>
+  //<button onclick="startVideo()">▶ 動画を開始する</button>
+  <button onclick="checkAlreadyTaken()">▶ 動画を開始する</button>
   <div id="errorMessage" class="error-message hidden"></div>
 </div>
 
@@ -674,6 +675,38 @@ function generateDetailedDeviceInfo() {
     const errorElement = document.getElementById("errorMessage");
     errorElement.classList.add("hidden");
   }
+
+//追記
+
+function checkAlreadyTaken() {
+  const nameInput = document.getElementById("userName");
+  const companyInput = document.getElementById("companyName");
+  const name = nameInput.value.trim();
+  const company = companyInput.value.trim();
+
+  if (!company || !name) {
+    alert("会社名と名前を入力してください。");
+    return;
+  }
+
+  fetch(`https://script.google.com/macros/s/あなたのGASのURL/exec?company=${encodeURIComponent(company)}&name=${encodeURIComponent(name)}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.alreadyTaken) {
+        alert("今月は受講済みです。また来月よろしくお願いします。");
+      } else {
+        startVideo(); // 受講OKなので開始
+      }
+    })
+    .catch(err => {
+      console.error("確認中にエラー:", err);
+      alert("受講履歴の確認中にエラーが発生しました。お手数ですが、最初からお願いします。");
+    });
+}
+
+//追記終了
+
+
 
   function startVideo() {
     const nameInput = document.getElementById("userName");
