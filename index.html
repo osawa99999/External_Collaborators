@@ -481,14 +481,16 @@
     document.getElementById("nameSection").classList.remove("hidden");
   }
 
-  // デバイス情報を生成する関数
   // 改良版：より正確なデバイス情報を生成する関数
 function generateDeviceInfo() {
   const userAgent = navigator.userAgent;
   let os = "Unknown OS";
   let browser = "Unknown Browser";
   
-  // OS判定
+  // タッチデバイス判定（iOS判定の補助）
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  
+  // OS判定（iOSの特殊対応）
   if (userAgent.indexOf("Windows") !== -1) {
     os = "Windows";
   } else if (userAgent.indexOf("iPhone") !== -1) {
@@ -496,7 +498,13 @@ function generateDeviceInfo() {
   } else if (userAgent.indexOf("iPad") !== -1) {
     os = "iOS (iPad)";
   } else if (userAgent.indexOf("Mac") !== -1) {
-    os = "macOS";
+    // MacかiPadかの判定（iOS 13+のiPadはMacのUserAgentを使う）
+    if (isTouchDevice && navigator.platform === 'MacIntel') {
+      // タッチ対応 + MacIntel = 高確率でiPad
+      os = "iOS (iPad)";
+    } else {
+      os = "macOS";
+    }
   } else if (userAgent.indexOf("Android") !== -1) {
     os = "Android";
   } else if (userAgent.indexOf("Linux") !== -1) {
@@ -532,6 +540,9 @@ function generateDetailedDeviceInfo() {
   let browser = "Unknown Browser";
   let version = "";
   
+  // タッチデバイス判定
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  
   // OS判定（バージョン情報付き）
   if (userAgent.indexOf("Windows NT 10.0") !== -1) {
     os = "Windows 10/11";
@@ -548,7 +559,12 @@ function generateDetailedDeviceInfo() {
     const iosMatch = userAgent.match(/OS (\d+_\d+)/);
     os = iosMatch ? `iOS ${iosMatch[1].replace('_', '.')} (iPad)` : "iOS (iPad)";
   } else if (userAgent.indexOf("Mac") !== -1) {
-    os = "macOS";
+    // MacかiPadかの判定
+    if (isTouchDevice && navigator.platform === 'MacIntel') {
+      os = "iOS (iPad)";
+    } else {
+      os = "macOS";
+    }
   } else if (userAgent.indexOf("Android") !== -1) {
     const androidMatch = userAgent.match(/Android (\d+\.?\d*)/);
     os = androidMatch ? `Android ${androidMatch[1]}` : "Android";
