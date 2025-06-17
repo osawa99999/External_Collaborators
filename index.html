@@ -482,37 +482,113 @@
   }
 
   // デバイス情報を生成する関数
-  function generateDeviceInfo() {
-    const userAgent = navigator.userAgent;
-    let os = "Unknown OS";
-    let browser = "Unknown Browser";
-    
-    // OS判定
-    if (userAgent.indexOf("Windows") !== -1) {
-      os = "Windows";
-    } else if (userAgent.indexOf("Mac") !== -1) {
-      os = "Mac";
-    } else if (userAgent.indexOf("Linux") !== -1) {
-      os = "Linux";
-    } else if (userAgent.indexOf("Android") !== -1) {
-      os = "Android";
-    } else if (userAgent.indexOf("iPhone") !== -1 || userAgent.indexOf("iPad") !== -1) {
-      os = "iOS";
-    }
-    
-    // ブラウザ判定
-    if (userAgent.indexOf("Chrome") !== -1 && userAgent.indexOf("Edge") === -1) {
-      browser = "Chrome";
-    } else if (userAgent.indexOf("Firefox") !== -1) {
-      browser = "Firefox";
-    } else if (userAgent.indexOf("Safari") !== -1 && userAgent.indexOf("Chrome") === -1) {
-      browser = "Safari";
-    } else if (userAgent.indexOf("Edge") !== -1) {
-      browser = "Edge";
-    }
-    
-    return `${os} / ${browser}`;
+  // 改良版：より正確なデバイス情報を生成する関数
+function generateDeviceInfo() {
+  const userAgent = navigator.userAgent;
+  let os = "Unknown OS";
+  let browser = "Unknown Browser";
+  
+  // OS判定
+  if (userAgent.indexOf("Windows") !== -1) {
+    os = "Windows";
+  } else if (userAgent.indexOf("iPhone") !== -1) {
+    os = "iOS (iPhone)";
+  } else if (userAgent.indexOf("iPad") !== -1) {
+    os = "iOS (iPad)";
+  } else if (userAgent.indexOf("Mac") !== -1) {
+    os = "macOS";
+  } else if (userAgent.indexOf("Android") !== -1) {
+    os = "Android";
+  } else if (userAgent.indexOf("Linux") !== -1) {
+    os = "Linux";
   }
+  
+  // ブラウザ判定（優先順位が重要！）
+  if (userAgent.indexOf("Edg") !== -1 || userAgent.indexOf("Edge") !== -1) {
+    browser = "Edge";
+  } else if (userAgent.indexOf("OPR") !== -1 || userAgent.indexOf("Opera") !== -1) {
+    browser = "Opera";
+  } else if (userAgent.indexOf("Firefox") !== -1 || userAgent.indexOf("FxiOS") !== -1) {
+    browser = "Firefox";
+  } else if (userAgent.indexOf("SamsungBrowser") !== -1) {
+    browser = "Samsung Browser";
+  } else if (userAgent.indexOf("Chrome") !== -1 || userAgent.indexOf("CriOS") !== -1) {
+    browser = "Chrome";
+  } else if (userAgent.indexOf("Safari") !== -1) {
+    browser = "Safari";
+  }
+  
+  return `${os} / ${browser}`;
+}
+
+// テスト用：現在のブラウザ情報を表示
+console.log("現在のデバイス情報:", generateDeviceInfo());
+console.log("UserAgent:", navigator.userAgent);
+
+// より詳細な情報が欲しい場合の拡張版
+function generateDetailedDeviceInfo() {
+  const userAgent = navigator.userAgent;
+  let os = "Unknown OS";
+  let browser = "Unknown Browser";
+  let version = "";
+  
+  // OS判定（バージョン情報付き）
+  if (userAgent.indexOf("Windows NT 10.0") !== -1) {
+    os = "Windows 10/11";
+  } else if (userAgent.indexOf("Windows NT 6.3") !== -1) {
+    os = "Windows 8.1";
+  } else if (userAgent.indexOf("Windows NT 6.1") !== -1) {
+    os = "Windows 7";
+  } else if (userAgent.indexOf("Windows") !== -1) {
+    os = "Windows";
+  } else if (userAgent.indexOf("iPhone") !== -1) {
+    const iosMatch = userAgent.match(/OS (\d+_\d+)/);
+    os = iosMatch ? `iOS ${iosMatch[1].replace('_', '.')} (iPhone)` : "iOS (iPhone)";
+  } else if (userAgent.indexOf("iPad") !== -1) {
+    const iosMatch = userAgent.match(/OS (\d+_\d+)/);
+    os = iosMatch ? `iOS ${iosMatch[1].replace('_', '.')} (iPad)` : "iOS (iPad)";
+  } else if (userAgent.indexOf("Mac") !== -1) {
+    os = "macOS";
+  } else if (userAgent.indexOf("Android") !== -1) {
+    const androidMatch = userAgent.match(/Android (\d+\.?\d*)/);
+    os = androidMatch ? `Android ${androidMatch[1]}` : "Android";
+  } else if (userAgent.indexOf("Linux") !== -1) {
+    os = "Linux";
+  }
+  
+  // ブラウザ判定（バージョン情報付き）
+  if (userAgent.indexOf("Edg/") !== -1) {
+    const edgeMatch = userAgent.match(/Edg\/(\d+\.\d+)/);
+    version = edgeMatch ? edgeMatch[1] : "";
+    browser = version ? `Edge ${version}` : "Edge";
+  } else if (userAgent.indexOf("OPR/") !== -1) {
+    const operaMatch = userAgent.match(/OPR\/(\d+\.\d+)/);
+    version = operaMatch ? operaMatch[1] : "";
+    browser = version ? `Opera ${version}` : "Opera";
+  } else if (userAgent.indexOf("Firefox/") !== -1) {
+    const firefoxMatch = userAgent.match(/Firefox\/(\d+\.\d+)/);
+    version = firefoxMatch ? firefoxMatch[1] : "";
+    browser = version ? `Firefox ${version}` : "Firefox";
+  } else if (userAgent.indexOf("FxiOS/") !== -1) {
+    browser = "Firefox (iOS)";
+  } else if (userAgent.indexOf("SamsungBrowser/") !== -1) {
+    const samsungMatch = userAgent.match(/SamsungBrowser\/(\d+\.\d+)/);
+    version = samsungMatch ? samsungMatch[1] : "";
+    browser = version ? `Samsung Browser ${version}` : "Samsung Browser";
+  } else if (userAgent.indexOf("Chrome/") !== -1) {
+    const chromeMatch = userAgent.match(/Chrome\/(\d+\.\d+)/);
+    version = chromeMatch ? chromeMatch[1] : "";
+    browser = version ? `Chrome ${version}` : "Chrome";
+  } else if (userAgent.indexOf("CriOS/") !== -1) {
+    browser = "Chrome (iOS)";
+  } else if (userAgent.indexOf("Safari/") !== -1) {
+    const safariMatch = userAgent.match(/Version\/(\d+\.\d+)/);
+    version = safariMatch ? safariMatch[1] : "";
+    browser = version ? `Safari ${version}` : "Safari";
+  }
+  
+  return `${os} / ${browser}`;
+}
   
   // クイズの問題データ（10問）
   const quizQuestions = [
